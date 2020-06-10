@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>startscreen.jpg</file>
+        <file>TDGmap1.jpg</file>
+        <file>choicescreen.jpg</file>
+        <file>button2.png</file>
+        <file>button3.png</file>
+    </qresource>
+</RCC>
