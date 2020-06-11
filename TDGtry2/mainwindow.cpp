@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ChoiceWindow * scene = new ChoiceWindow;
     //connect(btn, &MyButton::clicked,this,&QMainWindow::close);
            //btn 按钮按下就关闭主界面
-           //这里什么时候用&MyButton什么时候用&QPushButton ?
+           //有个待解决：这里什么时候用&MyButton什么时候用&QPushButton ?
     connect(btn, &QPushButton::clicked,this,[=](){
         btn->zoomdown();
         btn->zoomup();  //按钮向上向下跳的效果，为了显示出来需要下面的QTimer来暂停。
