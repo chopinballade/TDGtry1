@@ -22,9 +22,9 @@
         <file>bullet2.png</file>
         <file>bullet3.png</file>
         <file>bgm1_start.mp3</file>
-        <file>bgm2_game_cute.mp3</file>
         <file>bgm3_help_cute.mp3</file>
         <file>bgm4_game_fight.mp3</file>
         <file>bgm5_game_fight.mp3</file>
+        <file>bgm2_game_cute.mp3</file>
     </qresource>
 </RCC>
