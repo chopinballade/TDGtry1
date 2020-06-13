@@ -9,7 +9,7 @@ MyObject2::MyObject2(QPoint startPos, QPoint targetPos, QString filename)
     this->_startPos=startPos;
     this->_currentPos=startPos;
     this->_targetPos=targetPos;
-    speed=2.0;  //先赋个值
+    speed=3.0;  //可手动对MyObject2类的物体速度赋值
 }
 
 void MyObject2::move(){

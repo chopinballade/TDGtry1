@@ -9,6 +9,9 @@
 #include"mybutton.h"
 #include<QTimer>  //用于展示按钮弹跳效果的延时
 #include<QMediaPlayer>
+#include<iostream>
+#include<ctime>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,11 +20,23 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setFixedSize(800,600); //界面大小
     ui->setupUi(this);
 
+
     MyButton * btn= new MyButton(":/button1.png");
      //MyButton类的成员 * btn 作为进入关卡选择的按钮，同时关闭主界面
     btn->setParent(this);  //手动指定父类
     btn->move(42,400);   //"play"按钮位置，待调整
     btn->setIconSize(QSize(170,80));
+
+
+    QMediaPlayer * player1 = new QMediaPlayer;
+    player1->setMedia(QUrl("qrc:/bgm3_help_cute.mp3"));
+    player1->setVolume(30);
+    player1->play();
+
+    QMediaPlayer * player2 = new QMediaPlayer;
+    player2->setMedia(QUrl("qrc:/bgm2_game_cute.mp3"));
+    player2->setVolume(30); //不急着play
+
 
     ChoiceWindow * scene = new ChoiceWindow;
     //connect(btn, &MyButton::clicked,this,&QMainWindow::close);
@@ -33,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
         QTimer::singleShot(400,this,[=](){
             this->hide();  //主界面的隐藏
             scene->show();  //新界面的展示。scene是上面刚new出来的
+            player1->stop();
+            player2->play();  //音乐切换。但放完就没了。需要改进以循环播放
         });//暂停400毫秒，指定在this界面
     });
   /*上面的lambda表达式（用于场景切换）即 connect [](){}()。
@@ -50,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(btn, &QPushButton::clicked,this,&QMainWindow::close);
         //btn是该物品，函数指针希望点击来发出信号,this,传到mainwindow上,希望点击后主窗口关闭。   */
 
+
 }
 
 MainWindow::~MainWindow()
@@ -60,4 +78,26 @@ void MainWindow::paintEvent(QPaintEvent *){ //每次打开mainwindow都会调用
     QPainter painter(this);
     QPixmap pixmap(":/startscreen.jpg");
     painter.drawPixmap(0,0,this->width(),this->height(),pixmap);
+
+    showGameName(&painter);  //展示游戏名称
 }
+
+void MainWindow::showGameName(QPainter * painter){
+    painter->save();  //先把画笔未改变状态之前的样子存起来
+    painter->setPen(Qt::white);  //画笔颜色为白
+    painter->setFont(QFont("Impact", 32));  //设置字体和字号.Impact/Arial Black/
+    painter->drawText(QRect(30,250,1000,500) , QString("Nightmare of the Mice’s Clan"));
+                      //指定绘画范围矩形框。左上角坐标（...,...），宽度...，高度...。
+    painter->restore();   //画完后恢复画笔
+}
+
+
+
+
+
+
+
+
+
+
+

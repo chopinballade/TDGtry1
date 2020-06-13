@@ -18,16 +18,18 @@ class ChoiceWindow : public QMainWindow
 public:
     explicit ChoiceWindow(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *);
-
-    //tower.cpp中的举例，点击按钮建塔：
-    void set_tower();
+    void set_tower();//tower.cpp中的举例，点击按钮建塔：
     void addMyObject();
     void updateScene();
+    void showInfo(QPainter * painter);
+    int HP=5;
+    int wave=1;  //只是举例。这种参数用于showInfo（实现文字框输出）
 
 private:
     QList<Tower*> tower_list;      //创建对应tower的tower_list
     QList<MyObject*> object_list;   //创建对应myobject的object_list
     QList<MyObject2*> object2_list;   //创建对应myobject2的object2_list
+
 
 signals:
     void chooseBack();  //添加一个信号，用于返回按钮返回主界面

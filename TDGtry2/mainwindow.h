@@ -20,6 +20,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
 //    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void showGameName(QPainter * painter);
 
 private:
     Ui::MainWindow *ui;
