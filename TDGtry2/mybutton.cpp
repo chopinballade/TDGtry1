@@ -15,6 +15,7 @@ MyButton::MyButton(QString pix): QPushButton(0){
 
 void MyButton::zoomdown(){
     QPropertyAnimation * animation = new QPropertyAnimation(this,"geometry");
+        //先创建一个动画类的对象。动的东西是this，动的属性是“geometry”。
     animation->setDuration(150);  //持续时间200毫秒
     animation->setStartValue(QRect(this->x(), this->y(), this->width(), this->height()));
     animation->setEndValue(QRect(this->x(), this->y()+10, this->width(), this->height()));

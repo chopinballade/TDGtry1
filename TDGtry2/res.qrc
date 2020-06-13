@@ -3,9 +3,6 @@
         <file>choicescreen.jpg</file>
         <file>startscreen.jpg</file>
         <file>button1.png</file>
-        <file>bullet1.png</file>
-        <file>bullet2.png</file>
-        <file>bullet3.png</file>
         <file>button2.png</file>
         <file>effect1.png</file>
         <file>effect2.png</file>
@@ -21,5 +18,8 @@
         <file>../bgm/bgm1_start.mp3</file>
         <file>button3.jpg</file>
         <file>tower1.png</file>
+        <file>bullet1.png</file>
+        <file>bullet2.png</file>
+        <file>bullet3.png</file>
     </qresource>
 </RCC>

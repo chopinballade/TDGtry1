@@ -31,7 +31,9 @@ SOURCES += \
     tdgobj.cpp \
     choicewindow.cpp \
     mybutton.cpp \
-    tower.cpp
+    tower.cpp \
+    myobject.cpp \
+    myobject2.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +42,9 @@ HEADERS += \
     tdgobj.h \
     choicewindow.h \
     mybutton.h \
-    tower.h
+    tower.h \
+    myobject.h \
+    myobject2.h
 
 FORMS += \
         mainwindow.ui
