@@ -33,7 +33,9 @@ SOURCES += \
     mybutton.cpp \
     tower.cpp \
     myobject.cpp \
-    myobject2.cpp
+    myobject2.cpp \
+    enemy.cpp \
+    heart.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +46,9 @@ HEADERS += \
     mybutton.h \
     tower.h \
     myobject.h \
-    myobject2.h
+    myobject2.h \
+    enemy.h \
+    heart.h
 
 FORMS += \
         mainwindow.ui

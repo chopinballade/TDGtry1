@@ -11,6 +11,11 @@
 #include"mainwindow.h"
 #include"myobject.h"
 #include"myobject2.h"
+#include"enemy.h"
+#include"heart.h"
+
+
+Enemy * enemy;
 
 ChoiceWindow::ChoiceWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -28,7 +33,7 @@ ChoiceWindow::ChoiceWindow(QWidget *parent) : QMainWindow(parent)
     //举例：按下一个“建塔”按钮就能创建一个塔
     MyButton * setTower = new MyButton(":/button3.jpg");
     setTower->setParent(this);
-    setTower->move(660,70);  //“建塔”按钮的位置
+    setTower->move(270,90);  //“建塔”按钮的位置
     connect(setTower,&MyButton::clicked,this,&ChoiceWindow::set_tower);
       //创建与建塔函数set_tower()的connect
 
@@ -39,11 +44,16 @@ ChoiceWindow::ChoiceWindow(QWidget *parent) : QMainWindow(parent)
     connect(addObject,&MyButton::clicked,this,&ChoiceWindow::addMyObject);
       //创建与建塔函数addMyObject()的connect
 
+    QTimer * timer1 = new QTimer(this);
+    connect(timer1, &QTimer::timeout, this, &ChoiceWindow::showEnemy);
+        //timeout--时间开始，this界面，执行的是choicewindow类的showEnemy函数
+    timer1->start(5000);  //从0毫秒开始，每 毫秒触发一次QTimer::timeout，即触发一次showEnemy
 
-    QTimer * timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &ChoiceWindow::updateScene);
+
+    QTimer * timer2 = new QTimer(this);
+    connect(timer2, &QTimer::timeout, this, &ChoiceWindow::updateScene);
         //timeout--时间开始，this界面，执行的是choicewindow类的updatescene函数
-    timer->start(10);  //从0毫秒开始，每10毫秒触发一次QTimer::timeout，即触发一次updatescene以更新界面，达到动画效果。
+    timer2->start(10);  //从0毫秒开始，每10毫秒触发一次QTimer::timeout，即触发一次updatescene以更新界面，达到动画效果。
 
 }
 
@@ -52,8 +62,7 @@ void ChoiceWindow::paintEvent(QPaintEvent *){ //每次打开choicewindow都会�
     QPixmap pixmap(":/TDGmap1.jpg");
     painter.drawPixmap(0,0,this->width(),this->height(),pixmap);
 
-
-    showInfo(&painter);   //输出想要的文字框。showInfo函数的实现在下面
+    showInfo(&painter);   //输出HP和wave的文字框。showInfo函数的实现在下面
 
     foreach(Tower* tower, tower_list){   //foreach类似for。类型是Tower*的tower，在tower_list中找。
         tower->draw(&painter);
@@ -65,11 +74,18 @@ void ChoiceWindow::paintEvent(QPaintEvent *){ //每次打开choicewindow都会�
         object2->draw(&painter);
     }//建myobject2显示
 
+
+    foreach (enemy, enemy_list) {
+        enemy->draw(&painter);
+    }//建enemy显示
+    Heart heart( 5 , ":/heart.png" );
+    heart.draw(&painter); //画心
+
 }
 
 //tower.cpp中上面的举例，点击按钮建塔：
 void ChoiceWindow::set_tower(){
-    Tower * a_new_tower = new Tower(QPoint(220,150),":/tower1.png");
+    Tower * a_new_tower = new Tower(QPoint(260,150),":/tower1.png");
        //建造新塔，设置位置。
     tower_list.push_back(a_new_tower);//把这个刚创建好的塔放进QList里面，方法类似vector。
        //见上面ChoiceWindow类的private:  QList<Tower*> tower_list;
@@ -77,23 +93,17 @@ void ChoiceWindow::set_tower(){
 }//以上这个函数是举例：点击“+”建塔按钮建一个固定了位置的塔
 
 void ChoiceWindow::addMyObject(){
-    MyObject2 * object2 = new MyObject2(QPoint(220,150), QPoint(600,400), ":/bullet1.png");
+    MyObject2 * object2 = new MyObject2(QPoint(250,160), enemy->getCurrentPos() , ":/bullet1.png");
+         //这里要改成识别enemy位置的数据，而且横纵坐标要都加一点，让子弹通过敌人图片中心位置
     object2_list.push_back(object2);
+
 //    object2->move();  //这一步放到了下面的updateScene函数里。MyObject2::move()是自己写的两点之间运动的函数，但目前还没加上让object2停下的判断条件
     update();  //这里update一次根本无法达到持续从某点到某点的动画效果，所以在choicewindow.h中再自己写一个updateScene()函数，用于多次更新界面
 
-    MyObject * object = new MyObject(QPoint(220,150), QPoint(640,240), ":/bullet3.png");
-    object_list.push_back(object);
-    object->move();  //MyObject::move()自己写的两点之间运动的函数
-    update();  //这里update一次根本无法达到持续从某点到某点的动画效果，所以在choicewindow.h中再自己写一个updateScene()函数，用于多次更新界面
-}
-
-void ChoiceWindow::updateScene(){ //用于多次更新界面达到动画效果
-    foreach (MyObject2 * object2, object2_list) {
-        object2->move();
-    }
-
-    update();  //先暂时这么写
+//    MyObject * object = new MyObject(QPoint(250,160), QPoint(640,240), ":/bullet1.png");
+//    object_list.push_back(object);
+//    object->move();  //MyObject::move()自己写的两点之间运动的函数
+//    update();  //这里update一次根本无法达到持续从某点到某点的动画效果，所以在choicewindow.h中再自己写一个updateScene()函数，用于多次更新界面
 }
 
 void ChoiceWindow::showInfo(QPainter *painter){
@@ -103,14 +113,30 @@ void ChoiceWindow::showInfo(QPainter *painter){
     painter->drawText(QRect(70,550,400,100) , QString("HP: %1    wave: %2").arg(HP).arg(wave));
                       //指定绘画范围矩形框。左上角坐标（...,...），宽度...，高度...。
                       //输入信息。格式：第一个参数%1，第二个参数%2，括号外.arg(num1).arg(num2)
-       //注意：尚未设置HP和wave值改变后，以上数字也改变的功能
+       //注意：尚未设置HP和wave值改变后，以上数字也改变的功能。可能会用到updatescene函数（吧）
     painter->restore();   //画完后恢复画笔
+}
+
+void ChoiceWindow::showEnemy(){
+    Enemy * enemy = new Enemy(QPoint(-150,190), QPoint(1200,190), ":/enemy3.png");
+    enemy_list.push_back(enemy);
+
+//    enemy->move();  //这一步放到了下面的updateScene函数里。Enemy::move()是自己写的两点之间运动的函数，但目前还没加上停下的判断条件
+    update();  //这里update一次根本无法达到持续从某点到某点的动画效果，所以在choicewindow.h中再自己写一个updateScene()函数，用于多次更新界面
 
 }
 
 
+void ChoiceWindow::updateScene(){ //用于多次更新界面达到动画效果
+    foreach (MyObject2 * object2, object2_list) {
+        object2->MyObject2::move();
+    }
+    foreach (Enemy * enemy, enemy_list) {
+        enemy->Enemy::move();
+    }
 
-
+    update();  //先暂时这么写
+}
 
 
 

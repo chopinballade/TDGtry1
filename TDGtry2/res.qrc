@@ -7,10 +7,6 @@
         <file>effect1.png</file>
         <file>effect2.png</file>
         <file>effect3.jpg</file>
-        <file>enemy1.png</file>
-        <file>enemy2.png</file>
-        <file>enemy3.png</file>
-        <file>heart.png</file>
         <file>TDGmap1.jpg</file>
         <file>TDGmap2.jpg</file>
         <file>tower2.png</file>
@@ -26,5 +22,9 @@
         <file>bgm4_game_fight.mp3</file>
         <file>bgm5_game_fight.mp3</file>
         <file>bgm2_game_cute.mp3</file>
+        <file>enemy1.png</file>
+        <file>heart.png</file>
+        <file>enemy2.png</file>
+        <file>enemy3.png</file>
     </qresource>
 </RCC>

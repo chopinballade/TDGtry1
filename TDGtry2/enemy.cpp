@@ -1,25 +1,31 @@
-#include "myobject2.h"
+#include "enemy.h"
 #include<QPoint>
-#include<QVector2D>    //MyObject2类 基于QVector2D的物体移动（二维向量）
+#include<QVector2D>
 #include<QPainter>
 
-MyObject2::MyObject2(QPoint startPos, QPoint targetPos, QString filename)
+Enemy::Enemy(QPoint startPos, QPoint targetPos, QString filename)
     :QObject(0), _pixmap(filename)
 {
     this->_startPos=startPos;
     this->_currentPos=startPos;
     this->_targetPos=targetPos;
-    speed=4.0;  //可手动对MyObject2类的物体速度赋值
+    speed=0.5;  //可手动对Enemy类的物体速度赋值
 }
 
-void MyObject2::move(){
+void Enemy::move(){
     QVector2D vector(_targetPos - _startPos);   //创建向量，从起始位置指向目标位置。中间用减号。
     vector.normalize();   //对向量进行标准化，成为单位向量。
     _currentPos = _currentPos + vector.toPoint() * speed;
                 //加上在单位向量方向上移动的长度。 .toPoint()函数将向量转化成Point类型，才能相加。
-                //再乘速度。即：方向为vector(_targetPos - _startPos)的方向，每次移动speed（=1.0）个单位长度。
+                //再乘速度。即：方向为vector(_targetPos - _startPos)的方向，每次移动speed（=...）个单位长度。
 }
 
-void MyObject2::draw(QPainter * painter){  //绘画函数
+void Enemy::draw(QPainter * painter){  //绘画函数
     painter->drawPixmap(_currentPos, _pixmap);  //在当前位置，画对应图片
 }
+
+QPoint Enemy::getCurrentPos(){  //获取当前位置
+    return this->_currentPos;
+}
+
+
