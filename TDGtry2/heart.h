@@ -11,9 +11,9 @@ class Heart : public QObject
 {
     Q_OBJECT
 public:
-    Heart(int HP, QString filename);
+    Heart(QString filename);
     void draw(QPainter * painter);
-    int _currentHP;
+
     QPixmap _pixmap;
 
 signals:

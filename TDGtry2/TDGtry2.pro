@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += multimedia
+CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,28 +28,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    icon.cpp \
-    tdgobj.cpp \
     choicewindow.cpp \
     mybutton.cpp \
     tower.cpp \
     myobject.cpp \
     myobject2.cpp \
     enemy.cpp \
-    heart.cpp
+    heart.cpp \
+    plistreader.cpp
 
 HEADERS += \
         mainwindow.h \
-    icon.h \
-    icon.h \
-    tdgobj.h \
     choicewindow.h \
     mybutton.h \
     tower.h \
     myobject.h \
     myobject2.h \
     enemy.h \
-    heart.h
+    heart.h \
+    plistreader.h
 
 FORMS += \
         mainwindow.ui

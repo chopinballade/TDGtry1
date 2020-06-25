@@ -60,20 +60,13 @@ MainWindow::MainWindow(QWidget *parent) :
         this->show();
     });  //主界面this和选择界面scene的连接。在ChoiceWindow中创建了back_btn按钮，点击即可emit一个chooseBack信号。
 
-/*以下为按钮举例
-    QPushButton * btn = new QPushButton(this);
-    btn->setFixedSize(100,50);
-    btn->move(40,40); //关卡选择（、主窗口关闭）按钮的大小和位置
-    connect(btn, &QPushButton::clicked,this,&QMainWindow::close);
-        //btn是该物品，函数指针希望点击来发出信号,this,传到mainwindow上,希望点击后主窗口关闭。   */
-
-
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 void MainWindow::paintEvent(QPaintEvent *){ //每次打开mainwindow都会调用（三次）
     QPainter painter(this);
     QPixmap pixmap(":/startscreen.jpg");
