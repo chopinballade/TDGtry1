@@ -24,7 +24,7 @@ public:
     MyObject(QPoint startPos, QPoint targetPos, int damage, Enemy *target,
            ChoiceWindow *gamewindow, const QPixmap &pixmap = QPixmap(":/bullet1.png"));
 
-    void draw(QPainter * painter);
+    void draw(QPainter * painter) const ;
         //像Tower一样，要一个绘画函数
     void move();  //使物体在两点之间移动
     QPoint getCurrentPos();  //获取当前位置
@@ -43,7 +43,7 @@ private:
 signals:
 
 public slots:
-    void hitTarget();
+    void damageEnemy();
 
 };
 

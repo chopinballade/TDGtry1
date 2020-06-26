@@ -12,8 +12,9 @@
 static const int Health_Bar_Width = 60;
 
 Enemy::Enemy(QPoint startPos, QPoint targetPos, ChoiceWindow *game, const QPixmap &sprite)
-    :QObject(0), _pixmap(sprite), active(false),
-      maxHP(40), currentHP(40), speed(1.0), gamewindow(game)
+    :QObject(0), _pixmap(sprite),
+      maxHP(40), currentHP(40), isAlive(false),
+      speed(1.0), gamewindow(game)
 {
     this->_startPos=startPos;
     this->_currentPos=startPos;
@@ -25,8 +26,8 @@ Enemy::~Enemy(){
     gamewindow = NULL;
 }
 
-void Enemy::doActivate(){
-    active = true;
+void Enemy::turnAlive(){
+    isAlive = true;
 }
 
 //void Enemy::move(){  //原来的move（）函数
@@ -39,12 +40,12 @@ void Enemy::doActivate(){
 
 void Enemy::move()
 {
-    if(active==false){
+    if(isAlive==false){
         return;
     }
-    if(_currentPos.x()>940){   //碰到heart了
-        gamewindow->getHpDamage();
-        gamewindow->removedEnemy(this);
+    if(_currentPos.x()>950){   //碰到heart了
+        gamewindow->HPDamage();
+        gamewindow->deleteEnemy(this);
         return;
     }
     qreal movementSpeed = speed;
@@ -60,7 +61,7 @@ void Enemy::move()
 
 
 void Enemy::draw(QPainter *painter){
-    if (!active)
+    if (!isAlive)
         return;
     painter->save();
 
@@ -89,19 +90,19 @@ void Enemy::draw(QPainter *painter){
 //    return currentPos;
 //}
 
-void Enemy::getRemoved(){
+void Enemy::getDeleted(){
     if (attackedTowersList.empty()){
         return;
     }
     foreach (Tower *attacker, attackedTowersList)
-        attacker->targetKilled();    
-    gamewindow->removedEnemy(this);   //通知game,此敌人已经阵亡
+        attacker->targetDead();
+    gamewindow->deleteEnemy(this);   //通知game,此敌人已经阵亡
 }
 
-void Enemy::getDamage(int damage){
+void Enemy::enemyGetDamage(int damage){
     currentHP -= damage;
     if (currentHP <= 0){
-        getRemoved();  //死亡并移除
+        getDeleted();  //死亡并移除
     }
 }
 
@@ -109,7 +110,7 @@ void Enemy::getAttacked(Tower *attacker){
     attackedTowersList.push_back(attacker);
 }
 
-void Enemy::gotLostSight(Tower *attacker){  //敌人逃离攻击范围
+void Enemy::haveEscaped(Tower *attacker){  //敌人逃离攻击范围
     attackedTowersList.removeOne(attacker);
 }
 

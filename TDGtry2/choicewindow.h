@@ -27,33 +27,28 @@ public:
     void set_tower1();//tower.cpp中的举例，点击按钮建塔：
     void set_tower2();
     void set_tower3();
-    void addMyObject();
+    void set_tower4();
     void showInfo(QPainter * painter);
 
     int HP; //玩家生命值
     int wave;
 
-    void showEnemy();
-    void getHpDamage(int damage = 1);
-    void removedEnemy(Enemy * enemy);
-    void addBullet(MyObject *bullet);
-    void removedBullet(MyObject *bullet);
+    void HPDamage(int damage = 1);
+    void deleteEnemy(Enemy * enemy);
+    void addBulletToList(MyObject *bullet);
+    void deleteBullet(MyObject *bullet);
     bool loadWave();
-    void preLoadWavesInfo();
-    void doGameOver();
+    void gameOverScene();
 
-    QList<Enemy *> fun_enemy_list() const;   //函数
+    QList<Enemy *> fun_enemy_list() const;   //获取enemy_list的函数
 
 protected:
-//    void mousePressEvent(QMouseEvent * event);
+//    void mousePressEvent(QMouseEvent * );  //备用建塔方式，鼠标点击处建塔
 
 private: 
     QList<Tower*> tower_list;      //创建对应tower的tower_list
-    //QList<MyObject*> object_list;   //创建对应myobject的object_list
-    QList<MyObject2*> object2_list;   //创建对应myobject2的object2_list
     QList<Enemy*> enemy_list;   //创建对应enemy的enemy_list
     QList<MyObject*> bullet_list;   //创建对应bullet的bullet_list
-    QList<QVariant>	wavesInfo;    //用于PlistReader
     bool gameEnded;
     bool gameWin;
 

@@ -18,7 +18,6 @@ class MainWindow : public QMainWindow
 public:
     void paintEvent(QPaintEvent*); //每次打开mainwindow都会调用（三次）
     MainWindow(QWidget *parent = nullptr);
-//    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void showGameName(QPainter * painter);
 

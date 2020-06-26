@@ -26,7 +26,5 @@
         <file>heart.png</file>
         <file>enemy2.png</file>
         <file>enemy3.png</file>
-        <file>Info.plist</file>
-        <file>Waves.plist</file>
     </qresource>
 </RCC>

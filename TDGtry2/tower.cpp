@@ -18,15 +18,17 @@
 Tower::Tower(QPoint pos, ChoiceWindow * gamewindow, const QPixmap &pixFileName)
     : QObject(0),mygamewindow(gamewindow), pixmap(pixFileName),
       _pos(pos),sizeX(80),sizeY(80),
-      attackRange(180),damage(10),fireRate(1000),attacking(false),chooseEnemy(NULL)
+      attackRange(180),damage(10),shootFre(800),   //先设每800ms发射一次子弹
+      attacking(false),chooseEnemy(NULL)
 {
-    fireRateTimer = new QTimer(this);
-    connect(fireRateTimer, SIGNAL(timeout()), this, SLOT(shootWeapon()));
+    shootFreTimer = new QTimer(this);
+    connect(shootFreTimer, SIGNAL(timeout()), this, SLOT(shoot()));
+      //将QTimer类的shootFreTimer与shoot()函数connect起来
 }
 
 Tower::~Tower(){
-    delete fireRateTimer;
-    fireRateTimer = NULL;
+    delete shootFreTimer;
+    shootFreTimer = NULL;
 }
 
 double Tower::getDistance(QPoint p1, QPoint p2){//友元函数
@@ -40,32 +42,18 @@ QPoint Tower::getPos(){
     return this->_pos;
 }
 
-void Tower::draw(QPainter * painter){    
-    painter->save();
-    painter->setPen(Qt::white);    // 绘制攻击范围圆圈
-    painter->drawEllipse(_pos, attackRange, attackRange);
-    // 绘制偏转坐标,由中心+偏移=左上
-    static const QPoint offsetPoint(- sizeX / 2, - sizeY / 2);
-    // 绘制炮塔并选择炮塔。这里将坐标原点移到_pos,绘制的适合,就要加上那个偏移点到左上角
-    painter->translate(_pos);
-    painter->drawPixmap(offsetPoint, pixmap);
-    painter->restore();
-}
-
 void Tower::checkEnemyInRange(){
     if (chooseEnemy){
         QVector2D normalized(chooseEnemy->getcurrentpos() - _pos);  //敌人到塔的向量
         normalized.normalize();
 
-        if (this->getDistance(chooseEnemy->getcurrentpos() , _pos) > this->attackRange){
-            // 如果敌人脱离攻击范围
-            lostSightOfEnemy();
+        if (this->getDistance(chooseEnemy->getcurrentpos() , _pos) > this->attackRange){ //敌人脱离攻击范围
+            chosenEnemyEscaped();
         }
     }
     else{ // 遍历敌人,看是否有敌人在攻击范围内
-        QList<Enemy *> enemyList = mygamewindow->fun_enemy_list();
-        foreach (Enemy *enemy, enemyList){
-            if (this->getDistance(chooseEnemy->_currentPos , _pos) < this->attackRange){
+        foreach (Enemy *enemy, mygamewindow->fun_enemy_list()){
+            if (getDistance(chooseEnemy->_currentPos , _pos) < attackRange){
                 chooseEnemyForAttack(enemy);
                 break;
             }
@@ -73,35 +61,46 @@ void Tower::checkEnemyInRange(){
     }
 }
 
-void Tower::attackEnemy(){
-    fireRateTimer->start(fireRate);
+void Tower::draw(QPainter * painter) const {
+    painter->save();
+    painter->setPen(Qt::white);
+    painter->drawEllipse(_pos, attackRange, attackRange);    // 绘制攻击范围圆圈，用画椭圆的函数
+    static const QPoint offsetPoint(- sizeX / 2, - sizeY / 2);    // 绘制偏转坐标,由中心+偏移=左上
+      // 绘制炮塔并选择炮塔。这里将坐标原点移到_pos,绘制的适合,就要加上那个偏移点到左上角
+    painter->translate(_pos);
+    painter->drawPixmap(offsetPoint, pixmap);
+    painter->restore();
 }
 
-void Tower::chooseEnemyForAttack(Enemy *enemy){
+void Tower::startShooting(){
+    shootFreTimer->start(shootFre);
+}
+
+void Tower::chooseEnemyForAttack(Enemy * enemy){
     chooseEnemy = enemy;
-    attackEnemy();
+    startShooting();
     chooseEnemy->getAttacked(this);
 }
 
-void Tower::shootWeapon(){
+void Tower::shoot(){
     MyObject *bullet = new MyObject(_pos,chooseEnemy->getcurrentpos(),damage,chooseEnemy, mygamewindow );
     bullet->move();
-    mygamewindow->addBullet(bullet);
+    mygamewindow->addBulletToList(bullet);
 }
 
-void Tower::targetKilled(){
+void Tower::targetDead(){
     if (chooseEnemy){
         chooseEnemy = NULL;
     }
-    fireRateTimer->stop();
+    shootFreTimer->stop();
 }
 
-void Tower::lostSightOfEnemy(){
-    chooseEnemy->gotLostSight(this);
-    if (chooseEnemy){
+void Tower::chosenEnemyEscaped(){
+    chooseEnemy->haveEscaped(this);
+    if(chooseEnemy){
         chooseEnemy = NULL;
     }
-    fireRateTimer->stop();
+    shootFreTimer->stop();
 }
 
 

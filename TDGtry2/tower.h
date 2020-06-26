@@ -18,17 +18,15 @@ class Tower : public QObject
 public:
     Tower(QPoint pos, ChoiceWindow * gamewindow, const QPixmap &pixFileName = QPixmap(":/tower1.png"));  //pos位置，pixFileName文件路径
     ~Tower();
-    void draw(QPainter * painter);
+    void draw(QPainter * painter) const;
     double getDistance(QPoint p1,QPoint p2);
     QPoint getPos();
 
     void checkEnemyInRange();
-    void targetKilled();
-    void attackEnemy();
+    void targetDead();
+    void startShooting();
     void chooseEnemyForAttack(Enemy *enemy);
-    void removeBullet();
-    void damageEnemy();
-    void lostSightOfEnemy();
+    void chosenEnemyEscaped();
 
 private:
     QPoint _pos;
@@ -38,17 +36,17 @@ private:
 
     int attackRange;
     int damage;
-    int fireRate;  //攻击频率，默认1000毫秒攻击一次
+    int shootFre;  //攻击频率，默认1000毫秒攻击一次
 
     bool attacking;
     Enemy * chooseEnemy;
     ChoiceWindow * mygamewindow;
-    QTimer * fireRateTimer;
+    QTimer * shootFreTimer;
 
 signals:
 
 public slots:
-    void shootWeapon();
+    void shoot();
 
 };
 

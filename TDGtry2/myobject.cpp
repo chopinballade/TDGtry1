@@ -16,7 +16,7 @@ MyObject::MyObject(QPoint startPos, QPoint targetPos, int damage, Enemy *target,
 {
 }
 
-void MyObject::draw(QPainter * painter){
+void MyObject::draw(QPainter * painter) const {
     painter->drawPixmap(_currentPos, _pixmap);
 }
 
@@ -26,16 +26,16 @@ void MyObject::move(){  //使物体在两点之间移动。参考并拓展mybutt
     animation->setDuration(duration);  //设置动画时长，即子弹总共运动100ms
     animation->setStartValue(_startPos);
     animation->setEndValue(_targetPos);
-    connect(animation, SIGNAL(finished()), this, SLOT(hitTarget()));
+    connect(animation, SIGNAL(finished()), this, SLOT(damageEnemy()));
     animation->start(); //手动开始
 }
 
-void MyObject::hitTarget(){
+void MyObject::damageEnemy(){
 
     if(gamewindow->fun_enemy_list().indexOf(target) != -1){
-        target->getDamage(damage);
+        target->enemyGetDamage(damage);
     }
-    gamewindow->removedBullet(this);
+    gamewindow->deleteBullet(this);
 
 }
 

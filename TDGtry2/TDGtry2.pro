@@ -34,8 +34,7 @@ SOURCES += \
     myobject.cpp \
     myobject2.cpp \
     enemy.cpp \
-    heart.cpp \
-    plistreader.cpp
+    heart.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,8 +44,7 @@ HEADERS += \
     myobject.h \
     myobject2.h \
     enemy.h \
-    heart.h \
-    plistreader.h
+    heart.h
 
 FORMS += \
         mainwindow.ui
