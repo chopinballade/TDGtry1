@@ -7,7 +7,7 @@
 #include<QDebug>
 #include"choicewindow.h"
 #include"mybutton.h"
-#include<QTimer>  //用于展示按钮弹跳效果的延时
+#include<QTimer>
 #include<QMediaPlayer>
 #include<iostream>
 #include<ctime>

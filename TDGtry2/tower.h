@@ -30,6 +30,7 @@ public:
     void upGradeTower();
     void changeTowerType();
     void changeTowerAttackRange();
+    void changeTowerDamage(int new_damage);
 
 private:
     QPoint _pos;

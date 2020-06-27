@@ -116,4 +116,9 @@ void Tower::changeTowerAttackRange(){  //用于第二种塔
     this->attackRange = this->attackRange*6/5;
 }
 
+void Tower::changeTowerDamage(int new_damage){
+    this->damage = new_damage;
+}
+
+
 

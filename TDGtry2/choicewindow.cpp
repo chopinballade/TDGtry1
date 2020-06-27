@@ -18,7 +18,7 @@
 
 ChoiceWindow::ChoiceWindow(QWidget *parent) :
     QMainWindow(parent),
-    HP(5),wave(1),gameEnded(false),gameWin(false)
+    HP(30),wave(1),gameEnded(false),gameWin(false)
 {
     this->setFixedSize(1100,700);
    //显示关卡选择界面的函数在下面单独的paintEvent
@@ -118,6 +118,7 @@ void ChoiceWindow::set_tower5(){
     Tower * tower = new Tower(QPoint(248,390), this);
     tower->changeTowerType();
     tower->changeTowerAttackRange();
+    tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
 }
@@ -125,6 +126,7 @@ void ChoiceWindow::set_tower6(){
     Tower * tower = new Tower(QPoint(448,390), this);
     tower->changeTowerType();
     tower->changeTowerAttackRange();
+    tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
 }
@@ -132,6 +134,7 @@ void ChoiceWindow::set_tower7(){
     Tower * tower = new Tower(QPoint(648,390), this);
     tower->changeTowerType();
     tower->changeTowerAttackRange();
+    tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
 }
@@ -139,6 +142,7 @@ void ChoiceWindow::set_tower8(){
     Tower * tower = new Tower(QPoint(848,390), this);
     tower->changeTowerType();
     tower->changeTowerAttackRange();
+    tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
 }

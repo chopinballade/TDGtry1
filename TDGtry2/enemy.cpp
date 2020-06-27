@@ -107,6 +107,10 @@ void Enemy::enemyGetDamage(int damage){
 }
 
 void Enemy::getAttacked(Tower *attacker){
+    if(attacker->pixmap == ":/tower1.png"){   //若受到塔1的攻击，则减速
+        this->slowSpeed();
+    }
+
     attackedTowersList.push_back(attacker);
 }
 
