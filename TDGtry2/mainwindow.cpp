@@ -20,13 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setFixedSize(800,600); //界面大小
     ui->setupUi(this);
 
-
     MyButton * btn= new MyButton(":/button1.png");
      //MyButton类的成员 * btn 作为进入关卡选择的按钮，同时关闭主界面
     btn->setParent(this);  //手动指定父类
     btn->move(42,400);   //"play"按钮位置，待调整
     btn->setIconSize(QSize(170,80));
-
 
     QMediaPlayer * player1 = new QMediaPlayer;
     player1->setMedia(QUrl("qrc:/bgm3_help_cute.mp3"));
@@ -39,17 +37,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     ChoiceWindow * scene = new ChoiceWindow;
-    //connect(btn, &MyButton::clicked,this,&QMainWindow::close);
-           //btn 按钮按下就关闭主界面
-           //有个待解决：这里什么时候用&MyButton什么时候用&QPushButton ?
+
     connect(btn, &QPushButton::clicked,this,[=](){
         btn->zoomdown();
         btn->zoomup();  //按钮向上向下跳的效果，为了显示出来需要下面的QTimer来暂停。
         QTimer::singleShot(400,this,[=](){
             this->hide();  //主界面的隐藏
-            scene->show();  //新界面的展示。scene是上面刚new出来的
+            scene->show();  //新界面的展示！！！！！scene是上面刚new出来的
             player1->stop();
-            player2->play();  //音乐切换。但放完就没了。需要改进以循环播放
+            player2->play();  //音乐切换
         });//暂停400毫秒，指定在this界面
     });
   /*上面的lambda表达式（用于场景切换）即 connect [](){}()。

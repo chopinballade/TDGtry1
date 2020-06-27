@@ -10,13 +10,11 @@
         <file>TDGmap1.jpg</file>
         <file>TDGmap2.jpg</file>
         <file>tower2.png</file>
-        <file>tower3.png</file>
         <file>../bgm/bgm1_start.mp3</file>
         <file>button3.jpg</file>
         <file>tower1.png</file>
         <file>bullet1.png</file>
         <file>bullet2.png</file>
-        <file>bullet3.png</file>
         <file>bgm1_start.mp3</file>
         <file>bgm3_help_cute.mp3</file>
         <file>bgm4_game_fight.mp3</file>
@@ -26,5 +24,8 @@
         <file>heart.png</file>
         <file>enemy2.png</file>
         <file>enemy3.png</file>
+        <file>tower3.png</file>
+        <file>bullet3.png</file>
+        <file>button4.jpg</file>
     </qresource>
 </RCC>

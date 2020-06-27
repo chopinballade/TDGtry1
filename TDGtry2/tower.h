@@ -27,6 +27,9 @@ public:
     void startShooting();
     void chooseEnemyForAttack(Enemy *enemy);
     void chosenEnemyEscaped();
+    void upGradeTower();
+    void changeTowerType();
+    void changeTowerAttackRange();
 
 private:
     QPoint _pos;
@@ -36,12 +39,11 @@ private:
 
     int attackRange;
     int damage;
-    int shootFre;  //攻击频率，默认1000毫秒攻击一次
+    int shootRate;
 
-    bool attacking;
-    Enemy * chooseEnemy;
+    Enemy * targetEnemy;
     ChoiceWindow * mygamewindow;
-    QTimer * shootFreTimer;
+    QTimer * shootingTimer;
 
 signals:
 

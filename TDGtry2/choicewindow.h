@@ -28,6 +28,10 @@ public:
     void set_tower2();
     void set_tower3();
     void set_tower4();
+    void set_tower5();
+    void set_tower6();
+    void set_tower7();
+    void set_tower8();
     void showInfo(QPainter * painter);
 
     int HP; //玩家生命值
@@ -39,6 +43,7 @@ public:
     void deleteBullet(MyObject *bullet);
     bool loadWave();
     void gameOverScene();
+    void upGradeAllTowers();
 
     QList<Enemy *> fun_enemy_list() const;   //获取enemy_list的函数
 

@@ -29,6 +29,7 @@ public:
     void move();  //使物体在两点之间移动
     QPoint getCurrentPos();  //获取当前位置
     void setCurrentPos(QPoint pos);  //设定当前位置
+    void changeBulletType();
 
 private:
     QPoint _startPos;

@@ -5,7 +5,6 @@
 #include<QPainter>
 #include<QColor>
 #include<QDebug>
-#include<QMatrix>
 #include<QtMath>
 #include"choicewindow.h"
 
@@ -94,8 +93,9 @@ void Enemy::getDeleted(){
     if (attackedTowersList.empty()){
         return;
     }
-    foreach (Tower *attacker, attackedTowersList)
+    foreach (Tower *attacker, attackedTowersList){
         attacker->targetDead();
+    }
     gamewindow->deleteEnemy(this);   //通知game,此敌人已经阵亡
 }
 
