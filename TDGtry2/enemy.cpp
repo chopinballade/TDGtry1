@@ -7,17 +7,19 @@
 #include<QDebug>
 #include<QtMath>
 #include"choicewindow.h"
+#include<QTimer>
+#include<stdio.h>
+
 
 static const int Health_Bar_Width = 60;
 
 Enemy::Enemy(QPoint startPos, QPoint targetPos, ChoiceWindow *game, const QPixmap &sprite)
     :QObject(0), _pixmap(sprite),
       maxHP(40), currentHP(40), isAlive(false),
-      speed(1.0), gamewindow(game)
+      speed(1.0), gamewindow(game),
+      _startPos(startPos),_currentPos(startPos),_targetPos(targetPos)
 {
-    this->_startPos=startPos;
-    this->_currentPos=startPos;
-    this->_targetPos=targetPos;
+
 }
 
 Enemy::~Enemy(){
@@ -28,14 +30,6 @@ Enemy::~Enemy(){
 void Enemy::turnAlive(){
     isAlive = true;
 }
-
-//void Enemy::move(){  //原来的move（）函数
-//    QVector2D vector(_targetPos - _startPos);   //创建向量，从起始位置指向目标位置。中间用减号。
-//    vector.normalize();   //对向量进行标准化，成为单位向量。
-//    _currentPos = _currentPos + vector.toPoint() * speed;
-//                //加上在单位向量方向上移动的长度。 .toPoint()函数将向量转化成Point类型，才能相加。
-//                //再乘速度。即：方向为vector(_targetPos - _startPos)的方向，每次移动speed（=...）个单位长度。
-//}
 
 void Enemy::move()
 {
@@ -52,11 +46,6 @@ void Enemy::move()
     normalized.normalize();
     _currentPos = _currentPos + normalized.toPoint() * movementSpeed;
 }
-
-
-//void Enemy::draw(QPainter * painter){  //绘画函数
-//    painter->drawPixmap(_currentPos, _pixmap);  //在当前位置，画对应图片
-//}
 
 
 void Enemy::draw(QPainter *painter){
@@ -82,16 +71,16 @@ void Enemy::draw(QPainter *painter){
     painter->restore();
 }
 
-//QPoint Enemy::getCenterPos(){  //获取敌人图片中心位置
-//    QPoint currentPos;
-//    currentPos.setX(_currentPos.x()+60);
-//    currentPos.setY(_currentPos.y()+40);
-//    return currentPos;
-//}
+QPoint Enemy::getCenterPos(){  //获取敌人图片中心位置
+    QPoint currentPos;
+    currentPos.setX(_currentPos.x()+40);
+    currentPos.setY(_currentPos.y()+30);
+    return currentPos;
+}
 
 void Enemy::getDeleted(){
     if (attackedTowersList.empty()){
-        return;
+        return;   //即没有打该敌人的塔，所以不会getRemoved
     }
     foreach (Tower *attacker, attackedTowersList){
         attacker->targetDead();
@@ -107,8 +96,17 @@ void Enemy::enemyGetDamage(int damage){
 }
 
 void Enemy::getAttacked(Tower *attacker){
-    if(attacker->pixmap == ":/tower1.png"){   //若受到塔1的攻击，则减速
-        this->slowSpeed();
+    if((attacker->getPos().y() < 300)
+//         && (attacker->getDistance(this->getcurrentpos(),attacker->getPos())) < (attacker->getAttackRange()-30)
+       )
+    {
+           //若受到上面那排塔1的攻击，则减速。为了配合子弹动画效果再加一个延时
+        if(attacker->getDistance(this->getcurrentpos(),attacker->getPos()) < (attacker->getAttackRange())+30){
+            QTimer::singleShot(1300, this, SLOT(slowSpeed()));
+        }
+
+//        else
+//            slowSpeed();
     }
 
     attackedTowersList.push_back(attacker);

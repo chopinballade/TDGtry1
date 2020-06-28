@@ -24,7 +24,7 @@ class ChoiceWindow : public QMainWindow
 public:
     explicit ChoiceWindow(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *);
-    void set_tower1();//tower.cpp中的举例，点击按钮建塔：
+    void set_tower1();//tower.cpp中的举例，点击按钮建塔
     void set_tower2();
     void set_tower3();
     void set_tower4();
@@ -54,6 +54,7 @@ private:
     QList<Tower*> tower_list;      //创建对应tower的tower_list
     QList<Enemy*> enemy_list;   //创建对应enemy的enemy_list
     QList<MyObject*> bullet_list;   //创建对应bullet的bullet_list
+    QList<MyObject*> bullet2_list;  //用于存放塔2的子弹2，建立塔和子弹的连接
     bool gameEnded;
     bool gameWin;
 

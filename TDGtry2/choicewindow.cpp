@@ -18,7 +18,7 @@
 
 ChoiceWindow::ChoiceWindow(QWidget *parent) :
     QMainWindow(parent),
-    HP(30),wave(1),gameEnded(false),gameWin(false)
+    HP(15),wave(1),gameEnded(false),gameWin(false)
 {
     this->setFixedSize(1100,700);
    //显示关卡选择界面的函数在下面单独的paintEvent
@@ -28,7 +28,11 @@ ChoiceWindow::ChoiceWindow(QWidget *parent) :
     back_btn->move(45,40); //设置返回按钮在屏幕的位置
 
     connect(back_btn, &MyButton::clicked, this, [=](){
-        emit chooseBack();  //emit用于发送signal。chooseback()是添加在ChoiceWindow类里的信号函数。
+        back_btn->zoomdown();
+        back_btn->zoomup();
+        QTimer::singleShot(400,this,[=](){
+            emit chooseBack();  //emit用于发送signal。chooseback()是添加在ChoiceWindow类里的信号函数。
+        });
     });
 
 
@@ -37,68 +41,95 @@ ChoiceWindow::ChoiceWindow(QWidget *parent) :
     MyButton * setTower1 = new MyButton(":/button3.jpg");
     setTower1->setParent(this);
     setTower1->move(220,90);  //“建塔”按钮的位置
-    connect(setTower1,&MyButton::clicked,this,&ChoiceWindow::set_tower1);
-
+    connect(setTower1,&MyButton::clicked,this,[=](){
+        setTower1->zoomdown();
+        setTower1->zoomup();
+        set_tower1();
+    });
     MyButton * setTower2 = new MyButton(":/button3.jpg");
     setTower2->setParent(this);
     setTower2->move(420,90);  //“建塔”按钮的位置
-    connect(setTower2,&MyButton::clicked,this,&ChoiceWindow::set_tower2);
-
+    connect(setTower2,&MyButton::clicked,this,[=](){
+        setTower2->zoomdown();
+        setTower2->zoomup();
+        set_tower2();
+    });
     MyButton * setTower3 = new MyButton(":/button3.jpg");
     setTower3->setParent(this);
     setTower3->move(620,90);  //“建塔”按钮的位置
-    connect(setTower3,&MyButton::clicked,this,&ChoiceWindow::set_tower3);
-
+    connect(setTower3,&MyButton::clicked,this,[=](){
+        setTower3->zoomdown();
+        setTower3->zoomup();
+        set_tower3();
+    });
     MyButton * setTower4 = new MyButton(":/button3.jpg");
     setTower4->setParent(this);
     setTower4->move(820,90);  //“建塔”按钮的位置
-    connect(setTower4,&MyButton::clicked,this,&ChoiceWindow::set_tower4);
+    connect(setTower4,&MyButton::clicked,this,[=](){
+        setTower4->zoomdown();
+        setTower4->zoomup();
+        set_tower4();
+    });
 
     MyButton * setTower5 = new MyButton(":/button3.jpg");
     setTower5->setParent(this);
     setTower5->move(220,490);  //“建塔”按钮的位置
-    connect(setTower5,&MyButton::clicked,this,&ChoiceWindow::set_tower5);
-
+    connect(setTower5,&MyButton::clicked,this,[=](){
+        setTower5->zoomdown();
+        setTower5->zoomup();
+        set_tower5();
+    });
     MyButton * setTower6 = new MyButton(":/button3.jpg");
     setTower6->setParent(this);
     setTower6->move(420,490);  //“建塔”按钮的位置
-    connect(setTower6,&MyButton::clicked,this,&ChoiceWindow::set_tower6);
-
+    connect(setTower6,&MyButton::clicked,this,[=](){
+        setTower6->zoomdown();
+        setTower6->zoomup();
+        set_tower6();
+    });
     MyButton * setTower7 = new MyButton(":/button3.jpg");
     setTower7->setParent(this);
     setTower7->move(620,490);  //“建塔”按钮的位置
-    connect(setTower7,&MyButton::clicked,this,&ChoiceWindow::set_tower7);
-
+    connect(setTower7,&MyButton::clicked,this,[=](){
+        setTower7->zoomdown();
+        setTower7->zoomup();
+        set_tower7();
+    });
     MyButton * setTower8 = new MyButton(":/button3.jpg");
     setTower8->setParent(this);
     setTower8->move(820,490);  //“建塔”按钮的位置
-    connect(setTower8,&MyButton::clicked,this,&ChoiceWindow::set_tower8);
+    connect(setTower8,&MyButton::clicked,this,[=](){
+        setTower8->zoomdown();
+        setTower8->zoomup();
+        set_tower8();
+    });
 
 
     //设置一个可以升级所有塔的按钮
     MyButton * btn_upGrade = new MyButton(":/button4.jpg");
     btn_upGrade->setParent(this);
     btn_upGrade->move(945,70);
-    connect(btn_upGrade, &MyButton::clicked, this, &ChoiceWindow::upGradeAllTowers);
+    connect(btn_upGrade, &MyButton::clicked, this, [=](){
+        btn_upGrade->zoomdown();
+        btn_upGrade->zoomup();
+        upGradeAllTowers();
+    });
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateScene()));
     timer->start(10);   //这个更新时间间隔越短，所有的运动速度也会按比例加快
 
-    QTimer::singleShot(3000, this, SLOT(gameStart()));// 设置300ms后游戏启动
+    QTimer::singleShot(15000, this, SLOT(gameStart()));// 设置300ms后游戏启动
 }
 
 
 
 //点击对应位置按钮建塔，共设八个按钮：
 void ChoiceWindow::set_tower1(){    //点击“+”建塔按钮建一个固定了位置的塔
-    Tower * a_new_tower = new Tower(QPoint(245,185), this);
-    qDebug()<<"a new tower is newed.";
-      //这句话用来检验上面那一行有没有运行。发现可以运行，说明问题出在tower_list的push_back这里。
-    tower_list.push_back(a_new_tower); //把这个刚创建好的塔放进QList里面，方法类似vector。
+    Tower * tower = new Tower(QPoint(245,185), this);
+    tower_list.push_back(tower); //把这个刚创建好的塔放进QList里面，方法类似vector。
     update();
 }
-
 void ChoiceWindow::set_tower2(){
     Tower * tower = new Tower(QPoint(445,185), this);
     tower_list.push_back(tower);
@@ -117,7 +148,6 @@ void ChoiceWindow::set_tower4(){
 void ChoiceWindow::set_tower5(){
     Tower * tower = new Tower(QPoint(248,390), this);
     tower->changeTowerType();
-    tower->changeTowerAttackRange();
     tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
@@ -125,7 +155,6 @@ void ChoiceWindow::set_tower5(){
 void ChoiceWindow::set_tower6(){
     Tower * tower = new Tower(QPoint(448,390), this);
     tower->changeTowerType();
-    tower->changeTowerAttackRange();
     tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
@@ -133,7 +162,6 @@ void ChoiceWindow::set_tower6(){
 void ChoiceWindow::set_tower7(){
     Tower * tower = new Tower(QPoint(648,390), this);
     tower->changeTowerType();
-    tower->changeTowerAttackRange();
     tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
@@ -141,7 +169,6 @@ void ChoiceWindow::set_tower7(){
 void ChoiceWindow::set_tower8(){
     Tower * tower = new Tower(QPoint(848,390), this);
     tower->changeTowerType();
-    tower->changeTowerAttackRange();
     tower->changeTowerDamage(15);
     tower_list.push_back(tower);
     update();
@@ -181,7 +208,10 @@ void ChoiceWindow::paintEvent(QPaintEvent *){ //每次打开choicewindow都会�
     }//建enemy显示
     foreach (MyObject * object, bullet_list) {
         object->draw(&painter);
-    }//建myobject(即子弹)显示。这里要改成判断距离自动发射
+    }//建myobject(即子弹)显示
+    foreach (MyObject * object, bullet2_list) {
+        object->draw(&painter);
+    }
 
     Heart heart( ":/heart.png" );
     heart.draw(&painter);  //画心
@@ -208,7 +238,6 @@ void ChoiceWindow::deleteEnemy(Enemy *enemy)
 
     enemy_list.removeOne(enemy);
     delete enemy;
-//    enemy=NULL;
 
     if (enemy_list.empty()){
         ++ wave;   //若清空一波敌人，来下一波
@@ -221,15 +250,25 @@ void ChoiceWindow::deleteEnemy(Enemy *enemy)
 void ChoiceWindow::addBulletToList(MyObject *bullet){
     Q_ASSERT(bullet);
 
-    bullet_list.push_back(bullet);
+    if(bullet->getBulletType()==1){
+        bullet_list.push_back(bullet);
+    }
+    else if(bullet->getBulletType()==2){   //第二种塔
+        bullet2_list.push_back(bullet);
+    }
 }
 
 void ChoiceWindow::deleteBullet(MyObject *bullet){
     Q_ASSERT(bullet);
 
-    bullet_list.removeOne(bullet);
+    if(bullet->getBulletType()==1){
+        bullet_list.removeOne(bullet);
+    }
+    else if(bullet->getBulletType()==2){
+        bullet2_list.removeOne(bullet);
+    }
+
     delete bullet;
-//    bullet=NULL;
 }
 
 bool ChoiceWindow::loadWave(){
@@ -246,7 +285,7 @@ bool ChoiceWindow::loadWave(){
         }
     }
     if(wave==2){
-        int enemyStartInterval[] = { 1000, 3000,5000,7000,10500,13000,15000, 18000,20000};
+        int enemyStartInterval[] = { 1000, 3000,5000,7000,9000,11000,13000, 15000,17000};
         for (int i = 0; i < 9; ++i){
             Enemy *enemy = new Enemy(QPoint(-150,240), QPoint(1200,240), this);
             enemy->fastSpeed();
@@ -290,6 +329,7 @@ void ChoiceWindow::updateScene(){ //用于多次更新界面达到动画效果
     foreach (Tower *tower, tower_list){
         tower->checkEnemyInRange();
     }
+
     update();
 }
 

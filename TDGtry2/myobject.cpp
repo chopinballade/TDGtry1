@@ -12,8 +12,12 @@ MyObject::MyObject(QPoint startPos, QPoint targetPos, int damage, Enemy *target,
     damage(damage),
     target(target),
     gamewindow(gamewindow),
-    _pixmap(pixmap)
+    _pixmap(pixmap),
+    type(1)
 {
+    if(this->getCurrentPos().y() > 300){
+        this->changeBulletType();
+    }
 }
 
 void MyObject::draw(QPainter * painter) const {
@@ -21,6 +25,7 @@ void MyObject::draw(QPainter * painter) const {
 }
 
 void MyObject::move(){  //使物体在两点之间移动。参考并拓展mybutton的动法
+
     static const int duration = 150;  //子弹总共运动150ms
     QPropertyAnimation * animation = new QPropertyAnimation(this, "_currentPos");  //新建一个动画。这里的currentPos是刚刚在myobject.h里设置然后认识的
     animation->setDuration(duration);  //设置动画时长，即子弹总共运动100ms
@@ -45,8 +50,13 @@ QPoint MyObject::getCurrentPos(){  //获取当前位置
     return _currentPos;
 }
 
+int MyObject::getBulletType(){
+    return type;
+}
+
 void MyObject::changeBulletType(){
-    this->_pixmap= QPixmap(":/bullet3.png");
+    _pixmap= QPixmap(":/bullet3.png");
+    type = 2;
 }
 
 

@@ -17,7 +17,7 @@
 Tower::Tower(QPoint pos, ChoiceWindow * gamewindow, const QPixmap &pixFileName)
     : QObject(0),
       _pos(pos),pixmap(pixFileName),sizeX(80),sizeY(80),
-      attackRange(180),damage(10),shootRate(800),   //先设每800ms发射一次子弹
+      attackRange(220),damage(8),shootRate(1000),   //先设每    ms发射一次子弹
       targetEnemy(NULL),mygamewindow(gamewindow)
 {
     shootingTimer = new QTimer(this);
@@ -28,6 +28,10 @@ Tower::Tower(QPoint pos, ChoiceWindow * gamewindow, const QPixmap &pixFileName)
 Tower::~Tower(){
     delete shootingTimer;
     shootingTimer = NULL;
+}
+
+int Tower::getAttackRange(){
+    return attackRange;
 }
 
 double Tower::getDistance(QPoint p1, QPoint p2){//友元函数
@@ -41,18 +45,22 @@ QPoint Tower::getPos(){
     return this->_pos;
 }
 
+QPixmap Tower::getPixmap(){
+    return this->pixmap;
+}
+
 void Tower::checkEnemyInRange(){
     if (targetEnemy){   //如果选中的目标敌人不是NULL，则准备瞄准
-        QVector2D normalized(targetEnemy->getcurrentpos() - _pos);  //敌人到塔的向量
+        QVector2D normalized(targetEnemy->getCenterPos()- _pos);  //敌人到塔的向量
         normalized.normalize();
 
-        if (getDistance(targetEnemy->getcurrentpos() , _pos) > attackRange){ //敌人逃离攻击范围
+        if (getDistance(targetEnemy->getCenterPos() , _pos+QPoint(30,20)) > attackRange){ //敌人逃离攻击范围
             chosenEnemyEscaped();
         }
     }
-    else{ // 遍历敌人,看是否有敌人在攻击范围内
+    else{ // 看所有在list里面的敌人有没有在攻击范围内的
         foreach (Enemy *enemy, mygamewindow->fun_enemy_list()){
-            if (getDistance(targetEnemy->getcurrentpos() , _pos) < attackRange){
+            if (getDistance(enemy->getCenterPos() +QPoint(20,0) , _pos+QPoint(30,20)) < attackRange){           //就是这里！！！！之前用的是targetEnemy的位置，而targetEnemy是NULL，所以造成了指针的问题
                 chooseEnemyForAttack(enemy);
                 break;
             }
@@ -83,7 +91,7 @@ void Tower::chooseEnemyForAttack(Enemy * enemy){
 }
 
 void Tower::shoot(){
-    MyObject *bullet = new MyObject(_pos,targetEnemy->getcurrentpos(),damage,targetEnemy, mygamewindow );
+    MyObject *bullet = new MyObject(_pos+QPoint(-40,-30),targetEnemy->getCenterPos(),damage,targetEnemy, mygamewindow );
     bullet->move();
     mygamewindow->addBulletToList(bullet);
 }
@@ -92,6 +100,7 @@ void Tower::targetDead(){
     if (targetEnemy){
         targetEnemy = NULL;
     }
+
     shootingTimer->stop();
 }
 
@@ -100,20 +109,23 @@ void Tower::chosenEnemyEscaped(){
     if(targetEnemy){
         targetEnemy = NULL;
     }
+
     shootingTimer->stop();
 }
 
 void Tower::upGradeTower(){
-    this->changeTowerType();
-    this->attackRange = this->attackRange*3/2;
+    this->attackRange = this->attackRange*7/6;
+    this->shootRate = this->shootRate *4/5;
 }
 
 void Tower::changeTowerType(){
     this->pixmap = QPixmap(":/tower3.png");
+    changeTowerAttackRange();
+    this->shootRate = shootRate * 2;
 }
 
 void Tower::changeTowerAttackRange(){  //用于第二种塔
-    this->attackRange = this->attackRange*6/5;
+    this->attackRange = this->attackRange*4/3;
 }
 
 void Tower::changeTowerDamage(int new_damage){

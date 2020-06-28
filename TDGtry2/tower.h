@@ -5,11 +5,13 @@
 #include<QSize>
 #include<QPoint>
 #include<QPixmap>
+#include<QList>
 
 class QPainter;
 class Enemy;
 class ChoiceWindow;
 class QTimer;
+class MyObject;
 
 class Tower : public QObject
 {
@@ -21,6 +23,7 @@ public:
     void draw(QPainter * painter) const;
     double getDistance(QPoint p1,QPoint p2);
     QPoint getPos();
+    QPixmap getPixmap();
 
     void checkEnemyInRange();
     void targetDead();
@@ -29,8 +32,10 @@ public:
     void chosenEnemyEscaped();
     void upGradeTower();
     void changeTowerType();
+    int getAttackRange();
     void changeTowerAttackRange();
     void changeTowerDamage(int new_damage);
+
 
 private:
     QPoint _pos;
@@ -45,6 +50,7 @@ private:
     Enemy * targetEnemy;
     ChoiceWindow * mygamewindow;
     QTimer * shootingTimer;
+    MyObject * bullet;   //用于改变子弹类型
 
 signals:
 

@@ -20,7 +20,6 @@ public:
     ~Enemy();
 
     void move();   //物体的移动。按向量方向，每次移动speed个单位长度。
-        //但不会停下，若要使其停下要再在函数里加限定条件，例如可以加很多flag和if，比如move方法里加入判断能不能动，是否到了拐弯的地方之类的
     void draw(QPainter * painter);
     QPoint getCenterPos();
     void enemyGetDamage(int damage);
@@ -28,8 +27,8 @@ public:
     void getAttacked(Tower *attacker);
     void haveEscaped(Tower *attacker);
     QPoint getcurrentpos() const;
-    void slowSpeed();
-    void fastSpeed();
+//    void slowSpeed();
+//    void fastSpeed();  //加到slots里面
     void changeEnemyType_1();
     void changeEnemyType_2();
 
@@ -50,6 +49,8 @@ private:
 signals:
 
 public slots:
+    void slowSpeed();
+    void fastSpeed();
     void turnAlive();
 
 };
